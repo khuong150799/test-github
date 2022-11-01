@@ -1,3 +1,4 @@
-function neww() {
+function neww(a,b) {
+    
     return 'hello';
 }
