@@ -1,0 +1,95 @@
+<form class='mt-4' id='container-form' method='POST' action='/course/handle-form-actions'>
+    <a href='/me/trash/courses'>thùng rác({{deletedCount}})</a>
+    <h2 class='mt-4'>Danh sách khóa học</h2>
+    <div class='mt-4 d-flex align-item-center'>
+        <div class='form-check'>
+            <input class='form-check-input' type='checkbox' value='' id='check-all' />
+            <label class='form-check-label' for='check-all'>
+                chọn tất cả
+            </label>
+        </div>
+        <select class='form-select select-option-all' aria-label='Default select example' name='action' required>
+            <option value=''>--Hành động--</option>
+            <option value='delete'>Xóa</option>
+
+        </select>
+        <button type='submit' class='btn btn-primary btn-submit disabled'>Thực hiện</button>
+    </div>
+    <table class='table'>
+        <thead>
+            <tr>
+                <th scope='col'></th>
+                <th scope='col'>
+                    ID
+                    {{{sortable '_id' _sort}}}
+                </th>
+                <th scope='col'>
+                    Tên khóa học
+                    {{{sortable 'name' _sort}}}
+                    {{!ba dấu ngoặc nhọn dùng cho trường hợp nhân biến từ local để không mã hóa các kí tự đặc biệt như: & < > "" '' =. nếu dùng ba dấu ngoặc nhọn sẽ dẫn đến trang web không đc bảo mật
+                    name là key trong mongodb
+                    }}
+                </th>
+                <th scope='col'>
+                    thời gian tạo
+                    {{{sortable 'createdAt' _sort}}}
+                </th>
+                <th scope='col'></th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each courses}}
+                <tr>
+                    <td>
+                        <input class='form-check-input' type='checkbox' name='coursesIds' value='{{this._id}}' />
+                    </td>
+                    <th scope='row'>{{this._id}}</th>
+                    <td>{{this.name}}</td>
+                    <td>{{this.createdAt}}</td>
+                    <td>
+                        <a href='/course/{{this._id}}/edit' class='btn btn-link'>sửa</a>
+                        <a
+                            href=''
+                            class='btn btn-link'
+                            data-bs-toggle='modal'
+                            data-bs-target='#modal-confirm-delete'
+                            data-id='{{this._id}}'
+                        >xóa</a>
+                    </td>
+                </tr>
+            {{else}}
+                <tr>
+                    <td colspan='4' class='text-center'>
+                        Danh sách khóa học trống.
+                        <a href='/course/create'>Đăng khóa học</a>
+                    </td>
+                </tr>
+            {{/each}}
+        </tbody>
+    </table>
+</form>
+
+{{!modal confirm delete}}
+<div class='modal' tabindex='-1' id='modal-confirm-delete'>
+    <div class='modal-dialog'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <h5 class='modal-title'>Xác nhận xóa khóa học</h5>
+                <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+            </div>
+            <div class='modal-body'>
+                <p>Bạn chắc chắn muốn xóa khóa học này.</p>
+            </div>
+            <div class='modal-footer'>
+                <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>
+                    Hủy
+                </button>
+                <button type='button' id='btn-delete-course' class='btn btn-danger'>Đồng ý</button>
+            </div>
+        </div>
+    </div>
+</div>
+<form method='POST' id='form-delete'></form>
+<script src='/script/storedCourses.js'>
+
+</script>

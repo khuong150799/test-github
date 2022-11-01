@@ -1,0 +1,79 @@
+<form id='container-form' class='mt-4' method='POST' action='/course/handle-form-actions'>
+    <h2 class='mt-4'>Thùng rác </h2>
+    <div class='mt-4 d-flex align-item-center'>
+        <div class='form-check'>
+            <input class='form-check-input' type='checkbox' value='' id='check-all' />
+            <label class='form-check-label' for='check-all'>
+                chọn tất cả
+            </label>
+        </div>
+        <select class='form-select select-option-all' aria-label='Default select example' name='action' required>
+            <option value=''>--Hành động--</option>
+            <option value='restore'>Khôi phục</option>
+            <option value='delete_forever'>Xóa vĩnh viễn</option>
+
+        </select>
+        <button type='submit' class='btn btn-primary btn-submit disabled'>Thực hiện</button>
+    </div>
+    <table class='table'>
+        <thead>
+            <tr>
+                <th></th>
+                <th scope='col'>#</th>
+                <th scope='col'>Tên khóa học</th>
+                <th scope='col'>thời gian tạo</th>
+                <th scope='col'></th>
+            </tr>
+        </thead>
+        <tbody>
+            {{#each courses}}
+                <tr>
+                    <td>
+                        <input class='form-check-input' type='checkbox' name='coursesIds' value='{{this._id}}' />
+                    </td>
+                    <th scope='row'>{{sum @index 1}}</th>
+                    <td>{{this.name}}</td>
+                    <td>{{this.createdAt}}</td>
+                    <td>
+                        <a href='' data-id='{{this._id}}' class='btn btn-link btn-restore'>Khôi phục</a>
+                        <a
+                            href=''
+                            class='btn btn-link'
+                            data-bs-toggle='modal'
+                            data-bs-target='#modal-confirm-forever'
+                            data-id='{{this._id}}'
+                        >xóa vĩnh viễn</a>
+                    </td>
+
+                </tr>
+            {{else}}
+                <tr><td colspan='4' class='text-center'>Thùng rác rỗng</td></tr>
+            {{/each}}
+        </tbody>
+    </table>
+</form>
+
+{{!modal confirm forever}}
+<div class='modal' tabindex='-1' id='modal-confirm-forever'>
+    <div class='modal-dialog'>
+        <div class='modal-content'>
+            <div class='modal-header'>
+                <h5 class='modal-title'>Xác nhận xóa khóa học</h5>
+                <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+            </div>
+            <div class='modal-body'>
+                <p>Bạn chắc chắn muốn xóa vĩnh viễn khóa học này.</p>
+            </div>
+            <div class='modal-footer'>
+                <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>
+                    Hủy
+                </button>
+                <button type='button' id='btn-forever-course' class='btn btn-danger'>xóa vĩnh viễn</button>
+            </div>
+        </div>
+    </div>
+</div>
+<form method='POST' id='form-forever'></form>
+<form method='POST' id='form-restore'></form>
+<script src='/script/trashCourses.js'>
+</script>
